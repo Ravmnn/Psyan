@@ -28,13 +28,12 @@ public class PerosyanRootCommand : RootCommand
         Add(Interactive = new Option<bool>("--interactive", "-i"));
 
 
-        SetAction(_ =>
+        SetAction(async _ =>
         {
-            Program.Run(this, GetOptions());
+            await Program.Run(this, GetOptions());
         });
 
         Result = Parse(args);
-        Result.Invoke();
     }
 
 
@@ -44,6 +43,8 @@ public class PerosyanRootCommand : RootCommand
         => new PerosyanOptions
         {
             Source = Result.GetValue(Source),
-            SourceFile = Result.GetValue(SourceFile)
+            SourceFile = Result.GetValue(SourceFile),
+
+            Interactive = Result.GetValue(Interactive)
         };
 }

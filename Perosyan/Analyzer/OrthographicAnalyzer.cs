@@ -1,6 +1,5 @@
 using Perosyan.Analyzer.Exceptions;
 
-
 namespace Perosyan.Analyzer;
 
 
@@ -14,24 +13,38 @@ public readonly record struct Syllable(string Substring, int Start)
 
 
 
-public class SyllableSeparator(string sourceWord)
+public class OrthographicAnalyzer(string sourceWord = "")
 {
     private List<Syllable> _syllables = [];
 
 
     public string Word { get; set; } = sourceWord;
 
+    // TODO: cleanup here
 
 
 
     public Syllable[] Split()
     {
+        var syllables = TrySplit(out var errorIndex);
+
+        if (syllables is null)
+            throw new OrthographicException(Word, errorIndex!.Value, "Invalid orthography");
+
+        return syllables;
+    }
+
+
+    public Syllable[]? TrySplit(out int? errorIndex)
+    {
+        errorIndex = null;
+        _syllables = [];
+
+
         var word = Word.Trim();
 
         if (word.Length == 0)
             return [];
-
-        _syllables = [];
 
         // the first letter may be an alone vowel: a-la-fa-ve-te
         //                                         ^
@@ -47,7 +60,8 @@ public class SyllableSeparator(string sourceWord)
             if (AddedTriSyllableDelimiterToLast(word, i) || AddedBiSyllable(word, ref i))
                 continue;
 
-            throw new OrthographicException(word, i, "Invalid syllable construction");
+            errorIndex = i;
+            return null;
         }
 
         return _syllables.ToArray();
@@ -98,4 +112,17 @@ public class SyllableSeparator(string sourceWord)
 
     private bool IsNextSequenceASyllable(string word, int i)
         => i + 1 < word.Length && Alphabet.Consonants.Contains(word[i]) && Alphabet.Vowels.Contains(word[i + 1]);
+
+
+
+
+    public int? GetOrthographyErrorIndex()
+    {
+        TrySplit(out var errorIndex);
+        return errorIndex;
+    }
+
+
+    public bool IsCorrect()
+        => GetOrthographyErrorIndex() is null;
 }

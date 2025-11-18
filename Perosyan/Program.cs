@@ -2,6 +2,8 @@
 
 using Spectre.Console;
 
+using PrettyPrompt;
+
 using Perosyan.Analyzer;
 using Perosyan.Analyzer.Exceptions;
 
@@ -13,19 +15,21 @@ namespace Perosyan;
 
 class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        _ = new PerosyanRootCommand(args);
+        var root = new PerosyanRootCommand(args);
+
+        await root.Result.InvokeAsync();
     }
 
 
 
 
-    public static void Run(PerosyanRootCommand root, PerosyanOptions options)
+    public static async Task Run(PerosyanRootCommand root, PerosyanOptions options)
     {
         if (options.Interactive)
         {
-            RunInteractive(options);
+            await RunInteractive(options);
             return;
         }
 
@@ -51,7 +55,7 @@ class Program
         try
         {
             foreach (var token in tokens)
-                wordsSyllables.Add(new SyllableSeparator(token.Lexeme).Split());
+                wordsSyllables.Add(new OrthographicAnalyzer(token.Lexeme).Split());
 
             foreach (var wordSyllable in wordsSyllables)
             {
@@ -73,8 +77,10 @@ class Program
 
 
 
-    public static void RunInteractive(PerosyanOptions options)
+    public static async Task RunInteractive(PerosyanOptions options)
     {
+        var prompt = new Prompt(callbacks: new PerosyanPromptCallbacks());
 
+        var result = await prompt.ReadLineAsync();
     }
 }
