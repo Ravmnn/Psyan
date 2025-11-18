@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perosyan", "Perosyan\Perosyan.csproj", "{AC0EBDFE-B93E-42DD-A283-F318226EBC32}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Psyan", "Psyan\Psyan.csproj", "{AC0EBDFE-B93E-42DD-A283-F318226EBC32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

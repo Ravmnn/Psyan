@@ -3,12 +3,11 @@
 using Spectre.Console;
 
 using PrettyPrompt;
+using Psyan.Analyzer;
+using Psyan.Analyzer.Exceptions;
 
-using Perosyan.Analyzer;
-using Perosyan.Analyzer.Exceptions;
 
-
-namespace Perosyan;
+namespace Psyan;
 
 
 

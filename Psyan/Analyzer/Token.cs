@@ -1,4 +1,4 @@
-namespace Perosyan.Analyzer;
+namespace Psyan.Analyzer;
 
 
 

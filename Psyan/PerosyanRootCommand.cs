@@ -1,7 +1,7 @@
 using System.CommandLine;
 
 
-namespace Perosyan;
+namespace Psyan;
 
 
 

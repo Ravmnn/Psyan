@@ -1,9 +1,9 @@
 using Spectre.Console;
 
-using Perosyan.Analyzer.Exceptions;
+using Psyan.Analyzer.Exceptions;
 
 
-namespace Perosyan;
+namespace Psyan;
 
 
 

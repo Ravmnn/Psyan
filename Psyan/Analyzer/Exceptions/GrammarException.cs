@@ -1,4 +1,4 @@
-namespace Perosyan.Analyzer.Exceptions;
+namespace Psyan.Analyzer.Exceptions;
 
 
 

@@ -1,6 +1,7 @@
-using Perosyan.Analyzer.Exceptions;
+using Psyan.Analyzer.Exceptions;
 
-namespace Perosyan.Analyzer;
+
+namespace Psyan.Analyzer;
 
 
 
@@ -20,19 +21,10 @@ public class OrthographicAnalyzer(string sourceWord = "")
 
     public string Word { get; set; } = sourceWord;
 
-    // TODO: cleanup here
-
 
 
     public Syllable[] Split()
-    {
-        var syllables = TrySplit(out var errorIndex);
-
-        if (syllables is null)
-            throw new OrthographicException(Word, errorIndex!.Value, "Invalid orthography");
-
-        return syllables;
-    }
+        => TrySplit(out var errorIndex) ?? throw new OrthographicException(Word, errorIndex!.Value, "Invalid orthography");
 
 
     public Syllable[]? TrySplit(out int? errorIndex)
@@ -55,7 +47,7 @@ public class OrthographicAnalyzer(string sourceWord = "")
         {
             // single-syllables are: a, e, i, o, u
             // bi-syllables are: ka, ke, sa, se, pi...
-            // tri-syllables are: kas, kes, sas, ses, pis, ton, pin...
+            // tri-syllables are: kas, kes, sas, ses, pis...
 
             if (AddedTriSyllableDelimiterToLast(word, i) || AddedBiSyllable(word, ref i))
                 continue;
@@ -125,4 +117,30 @@ public class OrthographicAnalyzer(string sourceWord = "")
 
     public bool IsCorrect()
         => GetOrthographyErrorIndex() is null;
+
+
+
+
+    public static bool IsSyllableValid(string syllable)
+    {
+        switch (syllable.Length)
+        {
+            case < 1 or > 3:
+                break;
+
+            // alone vowels, like in "a-la-fa-ve-te"
+            //                        ^
+            case 1:
+                return Alphabet.Vowels.Contains(syllable[0]) && !Alphabet.Consonants.Contains(syllable[0]);
+
+            case 2:
+                return Alphabet.Consonants.Contains(syllable[0]) && Alphabet.Vowels.Contains(syllable[1]);
+
+            case 3:
+                return Alphabet.Consonants.Contains(syllable[0]) && Alphabet.Vowels.Contains(syllable[1])
+                                                                 && syllable[2] is 's';
+        }
+
+        return false;
+    }
 }
