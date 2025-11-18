@@ -81,5 +81,7 @@ class Program
         var prompt = new Prompt(callbacks: new PerosyanPromptCallbacks());
 
         var result = await prompt.ReadLineAsync();
+
+        RunPassive(options with { Source = result.Text });
     }
 }
